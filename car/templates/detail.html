@@ -1,0 +1,31 @@
+<!-- detail.html -->
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <img src="{{ object.image.url }}" alt="{{ object.name }}" class="img-fluid rounded" style="height: 400px; object-fit: cover;">
+        </div>
+        
+        <div class="col-md-6 bg-gradient p-2">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h1 class="mb-3">{{ object.name }}</h1>
+                    <p class="lead">Price: <strong>${{ object.price }}</strong></p>
+                    <p>Description: {{ object.description }}</p>
+                    <p>Quantity Available: <strong>{{ object.quantity }}</strong></p>
+                    <p>Brand: <strong>{{ object.brand.name }}</strong></p>
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'buy_car' object.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success mt-3">Buy Now</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

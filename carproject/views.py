@@ -1,14 +1,23 @@
-from django.views.generic import TemplateView
-# from album.models import Albummodel 
+# views.py
+from django.shortcuts import render
+from car.models import CarModel, BrandModel
 
-class home(TemplateView):
-  template_name = 'home.html'
+def home(request):
+    
+    selected_brand = request.GET.get('brand')
+
+    
+    if selected_brand:
+        cars = CarModel.objects.filter(brand_id=selected_brand)
+    else:
+        cars = CarModel.objects.all()
+
   
-  def get(self, request, *args, **kwargs):
-    context = self.get_context_data(**kwargs)
-    context['albums'] = 'samiul'
-    return self.render_to_response(context)
-  
-  
- 
-  
+    brands = BrandModel.objects.all()
+
+    context = {
+        'cars': cars,
+        'brands': brands,
+        'selected_brand': selected_brand,
+    }
+    return render(request, 'home.html', context)

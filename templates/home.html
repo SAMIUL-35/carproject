@@ -1,19 +1,57 @@
 {% extends "base.html" %}
-{% load static %}  <!-- Load the static files -->
-{% block content %}
+{% load static %}
 
-<div class="container m-4">
+{% block content %}
+<div class="container m-5">
   <div class="row justify-content-center align-items-center">
-    <!-- Left column for the text -->
     <div class="col-12 col-md-6 mb-3 mb-md-0">
-      <p class="p-4">Discover Your Dream Car Today! Explore our wide selection of top-quality vehicles designed to fit every lifestyle and budget. Whether you’re looking for a sleek sedan, a spacious SUV, or a powerful truck, we have the perfect car for you. Our team of experts is here to assist you in finding the right vehicle, ensuring a seamless buying experience. Enjoy competitive pricing, flexible financing options, and exceptional customer service. Visit us today to test drive your favorite models and experience the thrill of driving your dream car. Don't wait—your perfect ride awaits! Drive into a new adventure with us!</p>
+      <p class="p-4 fs-4 fw-bold text-dark">
+        Discover your dream car today! Our selection includes everything from sleek city cars to spacious family SUVs and rugged off-road vehicles. Enjoy competitive pricing, flexible financing, and expert assistance tailored to your needs. Visit us to find the perfect vehicle and drive confidently into new adventures!
+      </p>
     </div>
 
-    <!-- Right column for the image -->
     <div class="col-12 col-md-6 text-center">
       <img src="{% static 'image/banner-2.jpg' %}" alt="Banner" class="img-fluid rounded">
     </div>
   </div>
 </div>
 
+<div class="container m-5">
+  <h2 class="text-center m-4 fw-bold text-dark">Filter Cars by Brand</h2>
+  <form method="GET" class="mb-4">
+    <div class="form-group">
+      <label for="brand">Search by Brand:</label>
+      <select name="brand" id="brand" class="form-control" onchange="this.form.submit()">
+        <option value="">All Brands</option> 
+        {% for brand in brands %}
+          <option value="{{ brand.id }}" {% if brand.id|stringformat:"s" == selected_brand %}selected{% endif %}>
+            {{ brand.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+</div>
+
+<div class="container m-5">
+  <h2 class="text-center m-4 fw-bold text-dark">Your Dream Car Awaits!</h2>
+  <div class="row">
+    {% for car in cars %}
+      <div class="col-12 col-md-4 d-flex align-items-stretch mb-4">
+        <div class="card w-100">
+          <div class="card-img-top-wrapper" style="height: 200px; overflow: hidden;">
+            <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.name }}" style="height: 100%; width: 100%; object-fit: cover;">
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ car.name }}</h5>
+            <p class="card-text">Price: ${{ car.price }}</p>
+            <a href="{% url 'detail' car.id %}" class="btn btn-primary mt-auto">View Details</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center fs-4 text-muted">No cars available at the moment.</p>
+    {% endfor %}
+  </div>
+</div>
 {% endblock content %}

@@ -9,7 +9,10 @@ from django.views.generic import CreateView, UpdateView, TemplateView
 from .forms import RegisterForm, ChangeUserForm
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
-# from album.models import Albummodel
+from car.models import CarModel
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 
 
@@ -45,7 +48,9 @@ class user_login(LoginView):
         context = super().get_context_data(**kwargs)
         context['type'] = 'Sign in'
         return context
-
+    
+    
+@method_decorator(login_required, name='dispatch')
 class update_user(UpdateView):
     form_class = ChangeUserForm
     model = User
@@ -56,7 +61,7 @@ class update_user(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Profile updated successfully.')
         return super().form_valid(form)
-
+@method_decorator(login_required, name='dispatch')
 class pass_change(PasswordChangeView):
     model = User
     form_class = PasswordChangeForm
@@ -68,17 +73,20 @@ class pass_change(PasswordChangeView):
         messages.success(self.request, 'Password changed successfully.')
         return super().form_valid(form)
 
+
+
+@method_decorator(login_required, name='dispatch')
 class profile(TemplateView):
     template_name = 'profile.html'
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        context['albums'] = 'profile'
-        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
+       
+        
+        context['cars'] = CarModel.objects.filter(purchased_by=self.request.user)  
         return context
+
 
 class user_Logout(LogoutView):
     def dispatch(self, request, *args, **kwargs):
