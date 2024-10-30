@@ -15,7 +15,6 @@
   </div>
 </div>
 
-<!-- Brand Filter Section -->
 <h2 class="text-center m-4 fw-bold text-dark">Your Dream Car Awaits!</h2>
 <div class="container ">
   <h2 class="text-center m-4 text-dark">Filter Cars by Brand</h2>
@@ -28,9 +27,9 @@
   </div>
 </div>
 
-<!-- Car Cards Section -->
 <div class="container m-5">
-  
+  <h3 class="text-center text-dark">Total Cars Found: {{ data|length }}</h3> 
+
   <div class="row">
     {% for car in data %}
       <div class="col-12 col-md-4 d-flex align-items-stretch mb-4">
@@ -41,7 +40,7 @@
           <div class="card-body d-flex flex-column p-4">
             <h5 class="card-title">{{ car.name }}</h5>
             <p class="card-text text-dark fs-5">Price: ${{ car.price }}</p>
-            <p class="card-text text-dark fs-5">Brand: ${{ car.brand }}</p>
+            <p class="card-text text-dark fs-5">Brand: {{ car.brand }}</p> 
             <a href="{% url 'detail' car.id %}" class="btn btn-success mt-auto">View Details</a>
           </div>
         </div>
