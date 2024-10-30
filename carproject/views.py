@@ -1,23 +1,13 @@
-# views.py
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from car.models import CarModel, BrandModel
 
-def home(request):
+def home(request, slug=None):
+    data = CarModel.objects.all()
     
-    selected_brand = request.GET.get('brand')
+    if slug:
+        brand = BrandModel.objects.get(slug=slug)
+        data = CarModel.objects.filter(brand=brand)
 
-    
-    if selected_brand:
-        cars = CarModel.objects.filter(brand_id=selected_brand)
-    else:
-        cars = CarModel.objects.all()
-
-  
     brands = BrandModel.objects.all()
-
-    context = {
-        'cars': cars,
-        'brands': brands,
-        'selected_brand': selected_brand,
-    }
-    return render(request, 'home.html', context)
+    
+    return render(request, 'home.html', {'data': data, 'brands': brands})

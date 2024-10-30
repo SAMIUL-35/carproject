@@ -57,10 +57,16 @@ class update_user(UpdateView):
     template_name = 'update_user.html'
     pk_url_kwarg = 'id'
     success_url = reverse_lazy('profile')
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        print(f"Fetched User: {obj.username}, {obj.first_name}, {obj.last_name}")  
+        return obj
 
     def form_valid(self, form):
         messages.success(self.request, 'Profile updated successfully.')
         return super().form_valid(form)
+    
+    
 @method_decorator(login_required, name='dispatch')
 class pass_change(PasswordChangeView):
     model = User

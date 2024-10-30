@@ -9,7 +9,7 @@ class CarModel(models.Model):
     brand = models.ForeignKey(BrandModel, on_delete=models.CASCADE, related_name='cars')
     description = models.TextField(blank=True, null=True)
     quantity = models.PositiveIntegerField(default=0)
-    purchased_by = models.ManyToManyField(User, related_name='purchased_cars', blank=True)  
-
+    purchased_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    
     def __str__(self):
         return self.name
