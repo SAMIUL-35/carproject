@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container w-50 mt-4">
+  <h1>Edit Profile</h1>
+  
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mt-2" aria-live="polite">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="bg-light p-4 border border-success text-dark">
+    <form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      
+      <div class="d-flex justify-content-between mt-3">
+        <button class="btn btn-success" type="submit">Submit</button>  
+        <a href="{% url 'pass_change' user.id %}" class="btn btn-success">Change Password</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}
